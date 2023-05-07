@@ -26,7 +26,7 @@ function prepareCanvas() {
     document.addEventListener('mousedown', function (event) {
         
         currentX = event.clientX - canvas.offsetLeft;
-        currentY = event.clientY - canvas.offsetHeight;
+        currentY = event.clientY - canvas.offsetTop;
         isMouseClicked = true;
     });
 
@@ -46,7 +46,7 @@ function prepareCanvas() {
             currentX = event.clientX - canvas.offsetLeft;
 
             previousY = currentY;
-            currentY = event.clientY - canvas.offsetHeight;
+            currentY = event.clientY - canvas.offsetTop;
 
             draw();
         }

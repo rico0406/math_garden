@@ -1,6 +1,8 @@
 var aswer;
 var score = 0;
 var backgroundImage = []
+var finishMessage = 'Congratulations!\n Thanks to you, Sun Shine, the Math Garden is safe! =D\nWell Done!'
+var mistakeMessage = ['Sorry, you are wrong! =(\n  You aswred', 'instead of', '. Try again!']
 
 function nextQuestion() {
     n1 = Math.floor(Math.random() * 5);
@@ -19,7 +21,7 @@ function checkAswer() {
         score++;
         if (score==7) {
             // alert('Parabéns, o jardim da matemática está a salvo graças a você, Floribela!')
-            alert('Congratulations!\n Thanks to you, Sun Shine, the Math Garden is safe! =D\nWell Done!')
+            alert(finishMessage)
             score = 0;
             backgroundImage = []
         }else{
@@ -31,7 +33,7 @@ function checkAswer() {
     } else if (score>0) {
         score--;
         // alert(`Você errou! =(\n  Sua resposta foi ${prediction}, mas a resposta correta era ${aswer}. Tente de novo!`)
-        alert(`Sorry, you are wrong! =(\n  You aswred ${prediction} instead of ${aswer}. Try again!`)
+        alert(`${mistakeMessage[0]} ${prediction} ${mistakeMessage[1]} ${aswer}${mistakeMessage[2]}`)
         setTimeout(function () {
             backgroundImage.pop();
             document.body.style.backgroundImage = backgroundImage;
