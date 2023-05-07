@@ -1,93 +1,99 @@
-const BACKGROUND_COLOR = "#000000";
-const LINE_COLOR = "#FFFFFF";
+const BACKGROUND_COLOUR = '#000000';
+const LINE_COLOUR = '#FFFFFF';
 const LINE_WIDTH = 15;
 
 var currentX = 0;
 var currentY = 0;
 var previousX = 0;
 var previousY = 0;
+
 var canvas;
 var context;
 
 function prepareCanvas() {
-    
-    var isMouseClicked = false;
-
+    // console.log('Preparing Canvas');
     canvas = document.getElementById('my-canvas');
     context = canvas.getContext('2d');
 
-    context.fillStyle = BACKGROUND_COLOR;
-    context.fillRect(0,0, canvas.clientWidth, canvas.clientHeight);
+    context.fillStyle = BACKGROUND_COLOUR;
+    context.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
-    context.strokeStyle = LINE_COLOR;
+    context.strokeStyle = LINE_COLOUR;
     context.lineWidth = LINE_WIDTH;
     context.lineJoin = 'round';
 
+    var isPainting = false;
+
+
     document.addEventListener('mousedown', function (event) {
-        
+        // console.log('Mouse Pressed!');
+        isPainting = true;
         currentX = event.clientX - canvas.offsetLeft;
-        currentY = event.clientY - canvas.offsetHeight;
-        isMouseClicked = true;
+        currentY = event.clientY - canvas.offsetTop;
+
     });
 
-    document.addEventListener('mouseup', function (event) {
-        isMouseClicked = false;
-    });
-
-    
     document.addEventListener('mousemove', function (event) {
-        /* if (event.clientX < 0 || event.clientX > canvas.offsetLeft + canvas.clientWidth || event.clienty < 0 || event.clienty > canvas.offsetHeight + canvas.clientHeight){
-            console.log(canvas.offsetLeft + canvas.clientWidth);
-            isMouseClicked = false;
-        } */            
-        
-        if (isMouseClicked) {
+
+        if (isPainting) {
             previousX = currentX;
             currentX = event.clientX - canvas.offsetLeft;
 
             previousY = currentY;
-            currentY = event.clientY - canvas.offsetHeight;
+            currentY = event.clientY - canvas.offsetTop;
 
             draw();
         }
-    })
 
-    canvas.addEventListener('mouseleave', function(event){
-        isMouseClicked = false;
-    })   
 
-    // Touch it!!!
+    });
 
+    document.addEventListener('mouseup', function (event) {
+        // console.log('Mouse Released');
+        isPainting = false;
+
+    });
+
+    canvas.addEventListener('mouseleave', function (event) {
+        isPainting = false;
+
+    });
+
+    // Touch Events
     canvas.addEventListener('touchstart', function (event) {
+        // console.log('Touchdown!');
+        isPainting = true;
         currentX = event.touches[0].clientX - canvas.offsetLeft;
-        currentY = event.touches[0].clientY - canvas.offsetHeight;
-        isMouseClicked = true;
+        currentY = event.touches[0].clientY - canvas.offsetTop;
+
     });
 
     canvas.addEventListener('touchend', function (event) {
-        isMouseClicked = false;
+        isPainting = false;
+
     });
 
-    
+    canvas.addEventListener('touchcancel', function (event) {
+        isPainting = false;
+
+    });
+
     canvas.addEventListener('touchmove', function (event) {
 
-        if (isMouseClicked) {
+        if (isPainting) {
             previousX = currentX;
             currentX = event.touches[0].clientX - canvas.offsetLeft;
 
             previousY = currentY;
-            currentY = event.touches[0].clientY - canvas.offsetHeight;
+            currentY = event.touches[0].clientY - canvas.offsetTop;
 
             draw();
         }
-        
-    });
-    
-    canvas.addEventListener('touchcancela', function(event){
-        isMouseClicked = false;
-    })   
 
-};
+
+    });
+
+}
 
 function draw() {
     context.beginPath();
@@ -98,9 +104,10 @@ function draw() {
 }
 
 function clearCanvas() {
-    currentX = canvas.offsetLeft;
-    currentY = canvas.offsetHight;
+    currentX = 0;
+    currentY = 0;
     previousX = 0;
     previousY = 0;
-    context.fillRect(0,0, canvas.clientWidth, canvas.clientHeight);
-};
+    context.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+}
